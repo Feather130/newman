@@ -1,0 +1,39 @@
+{
+  "id": "146e52f0-fd32-4814-8e58-8a3c0f4d5eb7",
+  "values": [
+    {
+      "key": "url",
+      "value": "http://192.168.8.143:30080",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "key": "auth",
+      "value": "Basic bWFuYWdlbWVudC9hZG1pbjphZG1pbjEyMw==",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "key": "ms",
+      "value": "50000",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "key": "loop",
+      "value": "20",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "key": "c8yUrl",
+      "value": "http://219.135.155.84:30080",
+      "description": "",
+      "enabled": true
+    }
+  ],
+  "name": "My Workspace Globals",
+  "_postman_variable_scope": "globals",
+  "_postman_exported_at": "2018-08-06T10:18:31.671Z",
+  "_postman_exported_using": "Postman/6.2.2"
+}
