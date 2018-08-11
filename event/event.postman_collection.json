@@ -11,7 +11,7 @@
 			"item": [
 				{
 					"_postman_id": "ac6e8da1-f7de-4048-9ff3-d6c0f3dbfdab",
-					"name": "Alarm/正常测试/创建报警设备",
+					"name": "Event/正常测试/创建报警设备",
 					"event": [
 						{
 							"listen": "test",
@@ -19,7 +19,7 @@
 								"id": "89e158e6-d15a-42a9-9f32-e25521bef6c2",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Alarm/正常测试/创建报警设备\", function () {",
+									"pm.test(\"Event/正常测试/创建报警设备\", function () {",
 									"    pm.response.to.have.status(201);",
 									"});",
 									"var data = pm.response.json();",
@@ -27,7 +27,7 @@
 									"",
 									"",
 									"",
-									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"pm.test(\"Event/正常测试/请求时间不超过 50000ms\", function () {",
 									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
 									"});",
 									""
@@ -73,7 +73,7 @@
 				},
 				{
 					"_postman_id": "3242b668-04bc-46b5-993a-c7470370cb67",
-					"name": "Alarm/正常测试/创建报警",
+					"name": "Event/正常测试/创建报警",
 					"event": [
 						{
 							"listen": "test",
@@ -81,27 +81,27 @@
 								"id": "8175d5fc-574d-4879-8672-47ff2023ae74",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Alarm/正常测试/状态应该为201\", function () {",
+									"pm.test(\"Event/正常测试/状态应该为201\", function () {",
 									"    pm.response.to.have.status(201);",
 									"});",
 									"",
 									"",
-									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"pm.test(\"Event/正常测试/请求时间不超过 50000ms\", function () {",
 									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
 									"});",
 									"",
 									"",
 									"var jsonData = pm.response.json();",
 									"",
-									"var alarm = pm.environment.get(\"alarm_id\");",
+									"var Event = pm.environment.get(\"Event_id\");",
 									"",
-									"if(!alarm){",
-									"    alarm=[];",
+									"if(!Event){",
+									"    Event=[];",
 									"}",
 									"",
-									"alarm.push(jsonData.id)",
+									"Event.push(jsonData.id)",
 									"",
-									"pm.environment.set(\"alarm_id\", alarm);",
+									"pm.environment.set(\"Event_id\", Event);",
 									"",
 									"var ACKNOWLEDGED = pm.environment.get(\"ACKNOWLEDGED\");",
 									"var CLEARED = pm.environment.get(\"CLEARED\");",
@@ -127,8 +127,8 @@
 									"pm.environment.set(\"CLEARED\", CLEARED);",
 									"",
 									"",
-									"if(alarm.length<parseInt(pm.environment.get(\"loop\"))){",
-									"    postman.setNextRequest(\"Alarm/正常测试/创建报警\")",
+									"if(Event.length<parseInt(pm.environment.get(\"loop\"))){",
+									"    postman.setNextRequest(\"Event/正常测试/创建报警\")",
 									"}",
 									""
 								]
@@ -158,7 +158,7 @@
 						"header": [
 							{
 								"key": "Accept",
-								"value": "application/vnd.com.nsn.cumulocity.alarm+json"
+								"value": "application/vnd.com.nsn.cumulocity.Event+json"
 							},
 							{
 								"key": "Authorization",
@@ -174,13 +174,13 @@
 							"raw": "{\r\n    \"type\" : \"{{$guid}}\",\r\n    \"time\" : \"{{time}}\",\r\n    \"text\" : \"{{$guid}}\",\r\n    \"status\" : \"{{status}}\",\r\n    \"severity\" : \"{{severity}}\",\r\n    \"source\" : { \r\n    \t\"id\" : \"{{device_id}}\", \r\n    \t\"self\" : \"https://server.domain.com/inventory/managedObjects/{{device_id}}\"\r\n    }\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/alarm/alarms/",
+							"raw": "{{url}}/Event/Events/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"alarm",
-								"alarms",
+								"Event",
+								"Events",
 								""
 							]
 						}
@@ -189,7 +189,7 @@
 				},
 				{
 					"_postman_id": "7a6da694-bebb-498f-98ae-9879e9a2a679",
-					"name": "Alarm/正常测试/确认报警",
+					"name": "Event/正常测试/确认报警",
 					"event": [
 						{
 							"listen": "test",
@@ -197,18 +197,18 @@
 								"id": "5e3987c3-76e6-4d05-85ac-e758f77cdabd",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Alarm/正常测试/状态应该为200\", function () {",
+									"pm.test(\"Event/正常测试/状态应该为200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"pm.test(\"Event/正常测试/请求时间不超过 50000ms\", function () {",
 									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
 									"});",
 									"",
 									"",
 									"",
 									" var jsonData = pm.response.json();",
-									"pm.test(\"Alarm/正常测试/报警状态应该被修改\", function () {",
+									"pm.test(\"Event/正常测试/报警状态应该被修改\", function () {",
 									"    pm.expect(jsonData.status).to.equal(JSON.parse(pm.request.body).status);",
 									"});",
 									"",
@@ -216,7 +216,7 @@
 									"var CLEARED = pm.environment.get(\"CLEARED\");",
 									"",
 									"if(CLEARED.indexOf(jsonData.id)>-1){",
-									"    pm.test(\"Alarm/正常测试/清除的报警不应该被更改\", function () {",
+									"    pm.test(\"Event/正常测试/清除的报警不应该被更改\", function () {",
 									"        pm.expect(jsonData.status).to.not.equal(JSON.parse(pm.request.body).status);",
 									"    });",
 									"}",
@@ -232,7 +232,7 @@
 									"if(que_statusList.length<parseInt(pm.environment.get(\"loop\"))){",
 									"    var index=parseInt(pm.environment.get(\"que_index\"));",
 									"    pm.environment.set(\"que_index\", index+1);",
-									"    postman.setNextRequest(\"Alarm/正常测试/确认报警\")",
+									"    postman.setNextRequest(\"Event/正常测试/确认报警\")",
 									"}"
 								]
 							}
@@ -243,14 +243,14 @@
 								"id": "de201881-472b-4fc1-be69-11a8f91df5ac",
 								"type": "text/javascript",
 								"exec": [
-									"var alarm=pm.environment.get(\"alarm_id\");",
+									"var Event=pm.environment.get(\"Event_id\");",
 									"",
 									"var index=pm.environment.get(\"que_index\");",
 									"if(!index){",
 									"    pm.environment.set(\"que_index\", \"0\");",
-									"    pm.environment.set(\"que_alarmOFeach\", alarm[0]);",
+									"    pm.environment.set(\"que_EventOFeach\", Event[0]);",
 									"}else{",
-									"    pm.environment.set(\"que_alarmOFeach\", alarm[index]);",
+									"    pm.environment.set(\"que_EventOFeach\", Event[index]);",
 									"}",
 									""
 								]
@@ -262,7 +262,7 @@
 						"header": [
 							{
 								"key": "Accept",
-								"value": "application/vnd.com.nsn.cumulocity.alarm+json"
+								"value": "application/vnd.com.nsn.cumulocity.Event+json"
 							},
 							{
 								"key": "Authorization",
@@ -278,14 +278,14 @@
 							"raw": "{\r\n    \"status\" : \"ACKNOWLEDGED\"\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/alarm/alarms/{{que_alarmOFeach}}",
+							"raw": "{{url}}/Event/Events/{{que_EventOFeach}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"alarm",
-								"alarms",
-								"{{que_alarmOFeach}}"
+								"Event",
+								"Events",
+								"{{que_EventOFeach}}"
 							]
 						}
 					},
