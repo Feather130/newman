@@ -1,0 +1,321 @@
+{
+	"info": {
+		"_postman_id": "d2442a89-ec50-4f36-bb44-a4534d5dbcce",
+		"name": "ceshi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "558db32d-ec13-431f-85dd-96b5d5ea354d",
+			"name": "正常测试 Copy",
+			"item": [
+				{
+					"_postman_id": "ac6e8da1-f7de-4048-9ff3-d6c0f3dbfdab",
+					"name": "Alarm/正常测试/创建报警设备",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "89e158e6-d15a-42a9-9f32-e25521bef6c2",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Alarm/正常测试/创建报警设备\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.environment.set(\"device_id\",data.id);",
+									"",
+									"",
+									"",
+									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"{{$guid}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/inventory/managedObjects",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"inventory",
+								"managedObjects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "3242b668-04bc-46b5-993a-c7470370cb67",
+					"name": "Alarm/正常测试/创建报警",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8175d5fc-574d-4879-8672-47ff2023ae74",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Alarm/正常测试/状态应该为201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
+									"});",
+									"",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"var alarm = pm.environment.get(\"alarm_id\");",
+									"",
+									"if(!alarm){",
+									"    alarm=[];",
+									"}",
+									"",
+									"alarm.push(jsonData.id)",
+									"",
+									"pm.environment.set(\"alarm_id\", alarm);",
+									"",
+									"var ACKNOWLEDGED = pm.environment.get(\"ACKNOWLEDGED\");",
+									"var CLEARED = pm.environment.get(\"CLEARED\");",
+									"",
+									"if(!ACKNOWLEDGED){",
+									"    ACKNOWLEDGED=[];",
+									"}",
+									"",
+									"if(!CLEARED){",
+									"    CLEARED=[];",
+									"}",
+									"",
+									"if(jsonData.status==='ACKNOWLEDGED'){",
+									"    ACKNOWLEDGED.push(jsonData.id)",
+									"}",
+									"",
+									"pm.environment.set(\"ACKNOWLEDGED\", ACKNOWLEDGED);",
+									"",
+									"if(jsonData.status==='CLEARED'){",
+									"    CLEARED.push(jsonData.id)",
+									"}",
+									"",
+									"pm.environment.set(\"CLEARED\", CLEARED);",
+									"",
+									"",
+									"if(alarm.length<parseInt(pm.environment.get(\"loop\"))){",
+									"    postman.setNextRequest(\"Alarm/正常测试/创建报警\")",
+									"}",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a8025d66-e8da-4b26-8025-f12bdab981ca",
+								"type": "text/javascript",
+								"exec": [
+									"var a=['ACKNOWLEDGED','ACTIVE','CLEARED'];",
+									"var statu = a[Math.floor(Math.random()*a.length)];",
+									"var b=['CRITICAL','MAJOR','MINOR','WARNING']",
+									"var severit=b[Math.floor(Math.random()*b.length)];",
+									"",
+									"pm.environment.set(\"status\",statu);",
+									"",
+									"pm.environment.set(\"severity\", severit);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.com.nsn.cumulocity.alarm+json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\" : \"{{$guid}}\",\r\n    \"time\" : \"{{time}}\",\r\n    \"text\" : \"{{$guid}}\",\r\n    \"status\" : \"{{status}}\",\r\n    \"severity\" : \"{{severity}}\",\r\n    \"source\" : { \r\n    \t\"id\" : \"{{device_id}}\", \r\n    \t\"self\" : \"https://server.domain.com/inventory/managedObjects/{{device_id}}\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/alarm/alarms/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"alarm",
+								"alarms",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "7a6da694-bebb-498f-98ae-9879e9a2a679",
+					"name": "Alarm/正常测试/确认报警",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e3987c3-76e6-4d05-85ac-e758f77cdabd",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Alarm/正常测试/状态应该为200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Alarm/正常测试/请求时间不超过 50000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.environment.get(\"ms\")));",
+									"});",
+									"",
+									"",
+									"",
+									" var jsonData = pm.response.json();",
+									"pm.test(\"Alarm/正常测试/报警状态应该被修改\", function () {",
+									"    pm.expect(jsonData.status).to.equal(JSON.parse(pm.request.body).status);",
+									"});",
+									"",
+									"",
+									"var CLEARED = pm.environment.get(\"CLEARED\");",
+									"",
+									"if(CLEARED.indexOf(jsonData.id)>-1){",
+									"    pm.test(\"Alarm/正常测试/清除的报警不应该被更改\", function () {",
+									"        pm.expect(jsonData.status).to.not.equal(JSON.parse(pm.request.body).status);",
+									"    });",
+									"}",
+									"",
+									"var que_statusList = pm.environment.get(\"que_statusList\");",
+									"if(!que_statusList){",
+									"    que_statusList=[];",
+									"}",
+									"que_statusList.push(jsonData.status)",
+									"",
+									"pm.environment.set(\"que_statusList\", que_statusList);",
+									"",
+									"if(que_statusList.length<parseInt(pm.environment.get(\"loop\"))){",
+									"    var index=parseInt(pm.environment.get(\"que_index\"));",
+									"    pm.environment.set(\"que_index\", index+1);",
+									"    postman.setNextRequest(\"Alarm/正常测试/确认报警\")",
+									"}"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "de201881-472b-4fc1-be69-11a8f91df5ac",
+								"type": "text/javascript",
+								"exec": [
+									"var alarm=pm.environment.get(\"alarm_id\");",
+									"",
+									"var index=pm.environment.get(\"que_index\");",
+									"if(!index){",
+									"    pm.environment.set(\"que_index\", \"0\");",
+									"    pm.environment.set(\"que_alarmOFeach\", alarm[0]);",
+									"}else{",
+									"    pm.environment.set(\"que_alarmOFeach\", alarm[index]);",
+									"}",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.com.nsn.cumulocity.alarm+json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\" : \"ACKNOWLEDGED\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/alarm/alarms/{{que_alarmOFeach}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"alarm",
+								"alarms",
+								"{{que_alarmOFeach}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4c4c4a1f-29e8-492c-ad88-2031e1b5e205",
+				"type": "text/javascript",
+				"exec": [
+					"var moment=require(\"moment\")",
+					"pm.environment.set(\"time\", moment().format(\"YYYY-MM-DDThh:mm:ss.SSSZ\"));",
+					"pm.environment.set(\"ms\", 50000);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5aedd8c9-3d8f-4461-908c-6afbb19051da",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
